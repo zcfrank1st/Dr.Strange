@@ -11,6 +11,7 @@ class application(entrance: String) extends StaticAnnotation {
 
   inline def apply(defn: Any): Any = meta {
     val arg = this match {
+      case q"new $_(entrance = ${Lit(entrance: String)})" => entrance
       case q"new $_(${Lit(entrance: String)})" => entrance
       case _ => abort("@application transform wrong")
     }
