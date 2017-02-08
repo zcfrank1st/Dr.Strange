@@ -15,8 +15,6 @@ Dr.Strange
 
 失败记录
 
-重试？
-
 #### Licence
 
 MIT

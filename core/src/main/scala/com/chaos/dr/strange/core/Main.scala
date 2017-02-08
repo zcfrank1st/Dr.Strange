@@ -5,5 +5,5 @@ import com.chaos.dr.strange.meta.application
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
-@application
+@application("Manager")
 object Main
