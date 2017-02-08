@@ -24,17 +24,19 @@ class application(entrance: String) extends StaticAnnotation {
   }
 }
 
-class actor(typ: Int, depends: String) extends StaticAnnotation {
+class actor(typ: Int) extends StaticAnnotation {
 
   inline def apply(defn: Any): Any = meta {
     val arg = this match {
-      case q"new $_(${Lit(typ: Int)}, ${Lit(depends: String)})" => (typ, depends)
+      case q"new $_(${Lit(typ: Int)})" => typ
       case _                                                => // nothing to do
     }
-    println(s"Arg is $arg")
 
-    val q"class $name { ..$body }" = defn
+    val q"class $name extends Actor { ..$body }" = defn
 
-    q"class $name"
+    arg match {
+      case 0 => defn
+      case 1 => q"class $name extends PersistentActor { ..$body }"
+    }
   }
 }
