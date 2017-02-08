@@ -17,11 +17,14 @@ class application(entrance: String) extends StaticAnnotation {
 
     val q"object $name" = defn
 
+
+    val imports = s"import $arg".parse[Stat].get
+
     val main =
       q"""
         println("hello world  1231231")
         println("666")
-        ${Term.Name(s"import $arg")}
+        $imports
         Manager.p
        """
 
