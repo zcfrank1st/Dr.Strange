@@ -8,18 +8,28 @@ import scala.annotation.StaticAnnotation
 import scala.meta._
 
 class application(entrance: String) extends StaticAnnotation {
+
   inline def apply(defn: Any): Any = meta {
     val arg = this match {
       case q"new $_(${Lit(entrance: String)})" => entrance
-      case _                                                => // nothing to do
+      case _ => abort("@application transform wrong")
     }
-    println(s"Arg is $arg")
 
     val q"object $name" = defn
+
     val main =
       q"""
-         println("hello world")
+        println("hello world  1231231")
+        println("666")
+        ${Term.Name(s"import $arg")}
+        Manager.p
        """
-    q"object $name extends App { $main }"
+
+
+    q"""
+        object $name extends App {
+          $main
+        }
+    """
   }
 }
