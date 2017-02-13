@@ -23,13 +23,13 @@ class Executor extends Actor with ActorLogging {
 
         case "post" =>
           val future = Future {
-            Request.Post(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
+            Request.Post(res).bodyString(ctnt.get, ContentType.APPLICATION_JSON).execute()
           }
           manipulateFailed(task, future)
 
         case "put" =>
           val future = Future {
-            Request.Put(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
+            Request.Put(res).bodyString(ctnt.get, ContentType.APPLICATION_JSON).execute()
           }
           manipulateFailed(task, future)
 
