@@ -53,3 +53,21 @@ project(':macros') {
         compile group: 'org.scalameta', name: 'scalameta_2.11', version: '1.4.0'
     }
 }
+
+project(':api') {
+  // http 接口
+}
+
+project(':seed') {
+    apply plugin: 'application'
+
+    dependencies {
+        compile 'com.typesafe.akka:akka-actor_2.11:2.4.16'
+        compile 'com.typesafe.akka:akka-cluster_2.11:2.4.16'
+        compile 'com.typesafe.akka:akka-slf4j_2.11:2.4.16'
+
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.9'
+    }
+
+    mainClassName = "com.chaos.dr.strange.seed.ClusterSeedApp"
+}

@@ -38,7 +38,7 @@ class application(entrance: String) extends StaticAnnotation {
              }
          }
 
-         val system = ActorSystem("DrStrange")
+         val system = ActorSystem("ClusterSystem")
          val a = system.actorOf(Props[$typ], "manager")
          system.actorOf(Props(classOf[Terminator], a), "terminator")
        """
