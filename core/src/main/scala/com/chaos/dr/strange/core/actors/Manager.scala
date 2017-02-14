@@ -20,12 +20,6 @@ class Manager extends Actor with ActorLogging {
   val gson = new Gson
 
   def receive: Receive = {
-    case MemberUp(member) =>
-      log.info("Member is Up: {}", member.address)
-    case UnreachableMember(member) =>
-      log.info("Member detected as Unreachable: {}", member)
-    case MemberRemoved(member, previousStatus) =>
-      log.info("Member is Removed: {} after {}", member.address, previousStatus)
     case task: String =>
       val t: Task = gson.fromJson(task, classOf[Task])
       if (0 == t.typ) {
@@ -35,6 +29,12 @@ class Manager extends Actor with ActorLogging {
         val scheduler = context.actorOf(Props[Scheduler])
         scheduler ! t
       }
+    case MemberUp(member) =>
+      log.info("Member is Up: {}", member.address)
+    case UnreachableMember(member) =>
+      log.info("Member detected as Unreachable: {}", member)
+    case MemberRemoved(member, previousStatus) =>
+      log.info("Member is Removed: {} after {}", member.address, previousStatus)
     case _ =>
   }
 }
