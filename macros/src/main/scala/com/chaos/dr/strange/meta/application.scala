@@ -40,9 +40,9 @@ class application(entrance: String) extends StaticAnnotation {
          }
 
          val system = ActorSystem("ClusterSystem")
-         val a = system.actorOf(Props[$typ], "manager")
-         ClusterClientReceptionist(system).registerService(a)
-         system.actorOf(Props(classOf[Terminator], a), "terminator")
+         val manager = system.actorOf(Props[$typ], "manager")
+         ClusterClientReceptionist(system).registerService(manager)
+         system.actorOf(Props(classOf[Terminator], manager), "terminator")
        """
 
 

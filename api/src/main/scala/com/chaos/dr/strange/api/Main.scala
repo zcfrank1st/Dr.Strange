@@ -2,7 +2,7 @@ package com.chaos.dr.strange.api
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorPath, ActorSystem}
 import akka.cluster.client.{ClusterClient, ClusterClientSettings}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
@@ -14,7 +14,7 @@ import com.chaos.dr.strange.meta.app
 import com.typesafe.config.ConfigFactory
 
 import scala.io.StdIn
-
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 /**
   * Created by zcfrank1st on 14/02/2017.
   */
@@ -27,13 +27,16 @@ object Main {
   implicit val executionContext = system.dispatcher
   implicit val timeout = Timeout(3, TimeUnit.SECONDS)
 
+  val initialContacts = Set(
+    ActorPath.fromString(config.getString("api.contact-points")))
+  val c = system.actorOf(ClusterClient.props(
+    ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
+
   object ApiPath {
     val route: Route =
       path("api") {
         post {
           entity(as[Task]) { task =>
-            val c = system.actorOf(ClusterClient.props(
-              ClusterClientSettings(system)), "client")
             c ! ClusterClient.Send("/user/manager", task, localAffinity = false)
             complete("ok")
           }
