@@ -10,7 +10,8 @@ import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.chaos.dr.strange.api.models.Task
-import com.chaos.dr.strange.meta.app
+import com.google.gson.Gson
+//import com.chaos.dr.strange.meta.app
 import com.typesafe.config.ConfigFactory
 
 import scala.io.StdIn
@@ -18,9 +19,9 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 /**
   * Created by zcfrank1st on 14/02/2017.
   */
-@app
-object Main {
-  val config = ConfigFactory.parseString("akka.cluster.roles = [frontend]").
+//@app
+object Main extends App with JsonSupport {
+  val config = ConfigFactory.parseString("akka.cluster.roles = [client]").
     withFallback(ConfigFactory.load())
   implicit val system = ActorSystem("ClusterSystem", config)
   implicit val materializer = ActorMaterializer()
@@ -32,12 +33,14 @@ object Main {
   val c = system.actorOf(ClusterClient.props(
     ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
 
+  val gson = new Gson
+
   object ApiPath {
     val route: Route =
       path("api") {
         post {
           entity(as[Task]) { task =>
-            c ! ClusterClient.Send("/user/manager", task, localAffinity = false)
+            c ! ClusterClient.Send("/user/manager", gson.toJson(task), localAffinity = false)
             complete("ok")
           }
         }

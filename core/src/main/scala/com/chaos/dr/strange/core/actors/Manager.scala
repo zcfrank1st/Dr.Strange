@@ -3,6 +3,7 @@ package com.chaos.dr.strange.core.actors
 import akka.actor.{Actor, ActorLogging, Props}
 import akka.cluster.Cluster
 import com.chaos.dr.strange.core.models.Task
+import com.google.gson.Gson
 
 
 /**
@@ -15,16 +16,18 @@ import com.chaos.dr.strange.core.models.Task
   */
 class Manager extends Actor with ActorLogging {
   val cluster = Cluster(context.system)
+  val gson = new Gson
 
   def receive: Receive = {
-    case task @ Task(typ, _, _, _, _) =>
-      if (0 == typ) {
+    case task: String =>
+      val t: Task = gson.fromJson(task, classOf[Task])
+      if (0 == t.typ) {
         val executor = context.actorOf(Props[Executor])
-        executor ! task
-      } else if (1 == typ) {
+        executor ! t
+      } else if (1 == t.typ) {
         val scheduler = context.actorOf(Props[Scheduler])
-        scheduler ! task
+        scheduler ! t
       }
-    case _ => // nothing
+    case _ =>
   }
 }

@@ -3,7 +3,7 @@ package com.chaos.dr.strange.core.models
 /**
   * Created by zcfrank1st on 13/02/2017.
   */
-case class Task (typ: Int, delayTime: Option[Long] = None ,reqTyp: String, reqUrl: String, reqContent: Option[String])
+final case class Task (typ: Int, delayTime: Long ,reqTyp: String, reqUrl: String, reqContent: String)
 
 import scalikejdbc._
 
@@ -14,8 +14,8 @@ object Record extends SQLSyntaxSupport[Record] {
   def apply(rs: WrappedResultSet): Record = new Record(
     rs.string("execute_time"), Task(
       rs.int("typ"),
-      rs.longOpt("delay_time"),
+      rs.long("delay_time"),
       rs.string("req_typ"),
       rs.string("req_url"),
-      rs.stringOpt("req_content")))
+      rs.string("req_content")))
 }
