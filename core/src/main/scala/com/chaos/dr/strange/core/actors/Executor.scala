@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by zcfrank1st on 08/02/2017.
   */
 class Executor extends Actor with ActorLogging {
-  implicit val ec: ExecutionContext = context.dispatcher
+  implicit val ec: ExecutionContext = context.dispatcher // todo dispatcher 优化单独使用
 
   override def receive: Receive = {
     case task @ Task(_, _, typ, res, ctnt) =>
