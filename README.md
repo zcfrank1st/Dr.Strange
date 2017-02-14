@@ -28,3 +28,4 @@ MIT
 4. [实现]失败任务进kafka队列重试
 5. [实现]persistent actor
 6. [修改]macros @app @application
+7. [修改]支持同一机器多jvm，多端口支持
