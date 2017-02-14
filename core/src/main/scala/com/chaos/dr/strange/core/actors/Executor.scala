@@ -5,52 +5,38 @@ import com.chaos.dr.strange.core.models.Task
 import org.apache.http.client.fluent.{Request, Response}
 import org.apache.http.entity.ContentType
 
-import scala.concurrent.{ExecutionContext, Future}
-
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
 class Executor extends Actor with ActorLogging {
-  implicit val ec: ExecutionContext = context.dispatcher // todo dispatcher 优化单独使用
-
   override def receive: Receive = {
     case task @ Task(_, _, typ, res, ctnt) =>
       typ.toLowerCase match {
         case "get" =>
-          val future = Future {
-            Request.Get(res).execute()
-          }
-          manipulateFailed(task, future)
+          val resp = Request.Get(res).execute()
+          manipulateResponse(resp)
 
         case "post" =>
-          val future = Future {
-            Request.Post(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
-          }
-          manipulateFailed(task, future)
+          val resp = Request.Post(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
+          manipulateResponse(resp)
 
         case "put" =>
-          val future = Future {
-            Request.Put(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
-          }
-          manipulateFailed(task, future)
+          val resp = Request.Put(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
+          manipulateResponse(resp)
 
         case "delete" =>
-          val future = Future {
+          val resp =
             Request.Delete(res).execute()
-          }
-          manipulateFailed(task, future)
+          manipulateResponse(resp)
       }
 
     case _ => // nothing
   }
 
-  def manipulateFailed(task: Task, future: Future[Response]): Unit = {
-    future onFailure {
-      case _ =>
-        val record = context.actorOf(Props[Record])
-        record ! task
+  def manipulateResponse(response: Response)(implicit task: Task): Unit = {
+    if (200 != response.returnResponse().getStatusLine.getStatusCode) {
+      val record = context.actorOf(Props[Record])
+      record ! task
     }
-
-    // TODO future on complete
   }
 }

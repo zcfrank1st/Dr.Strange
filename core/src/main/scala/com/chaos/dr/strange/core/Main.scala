@@ -16,8 +16,8 @@ object Main extends App {
 
   val system = ActorSystem("ClusterSystem")
   // todo check cluster seed if no then do self register(akka://) else get node and join
-//  val address = Cluster(system).selfAddress
-//  Cluster(system).join(address)
+  val address = Cluster(system).selfAddress
+  Cluster(system).join(address)
   val manager = system.actorOf(Props[Manager], "manager")
   ClusterClientReceptionist(system).registerService(manager)
 
