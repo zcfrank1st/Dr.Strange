@@ -21,4 +21,5 @@ object Main extends App {
   ClusterClientReceptionist(system).registerService(manager)
 
   // TODO 启动多个实例
+  // TODO 动态加载cluster seed
 }
