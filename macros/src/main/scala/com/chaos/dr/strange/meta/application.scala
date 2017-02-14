@@ -28,6 +28,7 @@ class application(entrance: String) extends StaticAnnotation {
       q"""
          $imports
          import akka.actor._
+         import akka.cluster.client.ClusterClientReceptionist
 
          class Terminator(ref: ActorRef) extends Actor with ActorLogging {
              context watch ref
@@ -40,6 +41,7 @@ class application(entrance: String) extends StaticAnnotation {
 
          val system = ActorSystem("ClusterSystem")
          val a = system.actorOf(Props[$typ], "manager")
+         ClusterClientReceptionist(system).registerService(a)
          system.actorOf(Props(classOf[Terminator], a), "terminator")
        """
 
