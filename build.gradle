@@ -45,6 +45,12 @@ project(':core') {
 
         compile group: 'com.chuusai', name: 'shapeless_2.11', version: '2.3.2'
         compile group: 'org.typelevel', name: 'cats_2.11', version: '0.9.0'
+
+
+        compile group: 'org.scalikejdbc', name: 'scalikejdbc_2.11', version: '2.5.0'
+        compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.5'
+        compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
+
     }
 
     mainClassName = "com.chaos.dr.strange.core.Main"
