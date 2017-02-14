@@ -21,6 +21,7 @@ MIT
 
 
 #### TODO
+0. [实现] 集群机器注册
 
 1. [修改]定时按准确时间计算(yyyy-MM-dd HH:mm:ss)
 2. [修改]集群actor调用，序列化方式优化
@@ -30,6 +31,3 @@ MIT
 
 6. [实现]失败任务进kafka队列重试
 7. [实现]persistent actor
-
-
-cluster seed 配置

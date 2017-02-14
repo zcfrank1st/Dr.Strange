@@ -15,11 +15,10 @@ object Main extends App {
   import akka.cluster.client.ClusterClientReceptionist
 
   val system = ActorSystem("ClusterSystem")
-  val address = Cluster(system).selfAddress
-  Cluster(system).join(address)
+  // todo check cluster seed if no then do self register(akka://) else get node and join
+//  val address = Cluster(system).selfAddress
+//  Cluster(system).join(address)
   val manager = system.actorOf(Props[Manager], "manager")
   ClusterClientReceptionist(system).registerService(manager)
 
-  // TODO 启动多个实例
-  // TODO 动态加载cluster seed
 }

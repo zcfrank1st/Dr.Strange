@@ -29,7 +29,7 @@ object Main extends App with JsonSupport {
   implicit val timeout = Timeout(3, TimeUnit.SECONDS)
 
   val initialContacts = Set(
-    ActorPath.fromString(config.getString("api.contact-points")))
+    ActorPath.fromString(config.getString("api.contact-points"))) // todo refactor get connect point
   val c = system.actorOf(ClusterClient.props(
     ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
 
