@@ -25,7 +25,8 @@ MIT
 1. [修改]定时按准确时间计算(yyyy-MM-dd HH:mm:ss)
 2. [修改]集群actor调用，序列化方式优化
 3. [修改]修改异步执行Future处理方式
-4. [实现]失败任务进kafka队列重试
-5. [实现]persistent actor
-6. [修改]macros @app @application
-7. [修改]支持同一机器多jvm，多端口支持
+4. [修改]macros @app @application
+5. [修改]支持同一机器多jvm，多端口支持
+
+6. [实现]失败任务进kafka队列重试
+7. [实现]persistent actor
