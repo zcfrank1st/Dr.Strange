@@ -5,12 +5,13 @@ import com.chaos.dr.strange.core.models.Task
 import org.apache.http.client.fluent.{Request, Response}
 import org.apache.http.entity.ContentType
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
 class Executor extends Actor with ActorLogging {
+  implicit val ec: ExecutionContext = context.dispatcher
 
   override def receive: Receive = {
     case task @ Task(_, _, typ, res, ctnt) =>

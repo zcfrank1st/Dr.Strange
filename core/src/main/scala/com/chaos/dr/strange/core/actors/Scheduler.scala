@@ -5,12 +5,14 @@ import java.util.concurrent.TimeUnit
 import akka.actor.{Actor, ActorLogging, Props}
 import com.chaos.dr.strange.core.models.Task
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
 
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
 class Scheduler extends Actor with ActorLogging{
+  implicit val ec: ExecutionContext = context.dispatcher
 
   override def receive: Receive = {
     case task @ Task(_, delayTime, _, _, _) =>

@@ -4,17 +4,19 @@ import akka.actor.{Actor, ActorLogging, Props}
 import com.chaos.dr.strange.core.actors.store.{KafkaStore, MysqlStore, Store}
 import com.chaos.dr.strange.core.models.Task
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
 class Record extends Actor with ActorLogging {
+  implicit val ec: ExecutionContext = context.dispatcher
+
   override def receive: Receive = {
     case task @ Task(_ ,_ ,_ ,_ ,_) =>
-      implicit val store = MysqlStore
       val future = Future {
+        implicit val store = MysqlStore
         recordFailed(task)
       }
 
