@@ -1,9 +1,9 @@
 package com.chaos.dr.strange.core.actors
 
-import akka.actor.{Actor, ActorLogging, Props, Terminated}
+import akka.actor.{Actor, ActorLogging, Props}
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent.{MemberRemoved, MemberUp, UnreachableMember}
-import com.chaos.dr.strange.core.models.Task
+import com.chaos.dr.strange.model.Task
 import com.google.gson.Gson
 
 
@@ -20,14 +20,22 @@ class Manager extends Actor with ActorLogging {
   val gson = new Gson
 
   def receive: Receive = {
-    case task: String =>
-      val t: Task = gson.fromJson(task, classOf[Task])
-      if (0 == t.typ) {
+    //    case task: String =>
+    //      val t: Task = gson.fromJson(task, classOf[Task])
+    //      if (0 == t.typ) {
+    //        val executor = context.actorOf(Props[Executor])
+    //        executor ! t
+    //      } else if (1 == t.typ) {
+    //        val scheduler = context.actorOf(Props[Scheduler])
+    //        scheduler ! t
+    //      }
+    case task: Task.TaskProto =>
+      if (0 == task.getTyp) {
         val executor = context.actorOf(Props[Executor])
-        executor ! t
-      } else if (1 == t.typ) {
+        executor ! task
+      } else if (1 == task.getTyp) {
         val scheduler = context.actorOf(Props[Scheduler])
-        scheduler ! t
+        scheduler ! task
       }
     case MemberUp(member) =>
       log.info("Member is Up: {}", member.address)

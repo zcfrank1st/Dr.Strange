@@ -1,8 +1,8 @@
 package com.chaos.dr.strange.core.actors
 
 import akka.actor.{Actor, ActorLogging, Props}
-import com.chaos.dr.strange.core.models.Task
-import org.apache.http.client.fluent.{Request, Response}
+import com.chaos.dr.strange.model.Task
+import org.apache.http.client.fluent.Request
 import org.apache.http.entity.ContentType
 
 /**
@@ -10,8 +10,11 @@ import org.apache.http.entity.ContentType
   */
 class Executor extends Actor with ActorLogging {
   override def receive: Receive = {
-    case task @ Task(_, _, typ, res, ctnt) =>
-      typ.toLowerCase match {
+    case task: Task.TaskProto =>
+      val res = task.getReqUrl
+      val ctnt = task.getReqContent
+
+      task.getReqTyp.toLowerCase match {
         case "get" =>
           val req = Request.Get(res)
           manipulateRequest(req)(task)
@@ -33,11 +36,12 @@ class Executor extends Actor with ActorLogging {
     case _ => // nothing
   }
 
-  def manipulateRequest(req: Request)(implicit task: Task): Unit = {
+  def manipulateRequest(req: Request)(implicit task: Task.TaskProto): Unit = {
     try {
-      req.connectTimeout(3).execute()
+      req.connectTimeout(5).execute()
     } catch {
-      case _ =>
+      case e: Throwable =>
+        log.error("[Manipulate Request Error] {}", e.getMessage)
         val record = context.actorOf(Props[Record])
         record ! task
     }
