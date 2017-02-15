@@ -8,4 +8,6 @@ object ConfigTest extends App {
 
   println(conf.getInt("url"))
   println(conf.getInt("current"))
+
+  println(System.currentTimeMillis)
 }

@@ -16,11 +16,14 @@ class Scheduler extends Actor with ActorLogging{
 
   override def receive: Receive = {
     case task : Task.TaskProto =>
-      val delayTime = task.getDelayTime
+      val delayTime = task.getDelayTime - System.currentTimeMillis
       
-      if (delayTime.isValidLong) {
+      if (delayTime > 0) {
         val executor = context.system.actorOf(Props[Executor])
-        context.system.scheduler.scheduleOnce(Duration.create(delayTime, TimeUnit.SECONDS), executor, task)
+        context.system.scheduler.scheduleOnce(Duration.create(delayTime, TimeUnit.MILLISECONDS), executor, task)
+      } else {
+        val executor = context.system.actorOf(Props[Executor])
+        executor ! task
       }
 
     case _ => // nothing
