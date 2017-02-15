@@ -31,6 +31,3 @@ MIT
 
 6. [实现]失败任务进kafka队列重试
 7. [实现]persistent actor
-
-
-为什么执行很慢？
