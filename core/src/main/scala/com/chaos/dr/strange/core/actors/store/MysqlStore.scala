@@ -1,5 +1,5 @@
 package com.chaos.dr.strange.core.actors.store
-import com.chaos.dr.strange.core.models.Task
+import com.chaos.dr.strange.model.Task
 import org.joda.time.DateTime
 
 /**
@@ -13,8 +13,8 @@ object MysqlStore extends Store {
 
   implicit val session = AutoSession
 
-  override def keep(task: Task): Unit = {
+  override def keep(task: Task.TaskProto): Unit = {
     val now = DateTime.now().toString("yyyy-MM-dd HH:mm:ss")
-    sql"insert into records (execute_time, typ, delay_time, req_typ, req_url, req_content) values (${now}, ${task.typ}, ${task.delayTime}, ${task.reqTyp}, ${task.reqUrl}, ${task.reqContent})".update().apply()
+    sql"insert into records (execute_time, typ, delay_time, req_typ, req_url, req_content) values (${now}, ${task.getTyp}, ${task.getDelayTime}, ${task.getReqTyp}, ${task.getReqUrl}, ${task.getReqContent})".update().apply()
   }
 }

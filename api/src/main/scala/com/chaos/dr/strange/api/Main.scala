@@ -10,6 +10,7 @@ import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.chaos.dr.strange.api.models.Task
+import com.chaos.dr.strange.model.Task.TaskProto
 import com.google.gson.Gson
 //import com.chaos.dr.strange.meta.app
 import com.typesafe.config.ConfigFactory
@@ -33,14 +34,15 @@ object Main extends App with JsonSupport {
   val c = system.actorOf(ClusterClient.props(
     ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
 
-  val gson = new Gson
+//  val gson = new Gson
 
   object ApiPath {
     val route: Route =
       path("api") {
         post {
           entity(as[Task]) { task =>
-            c ! ClusterClient.Send("/user/manager", gson.toJson(task), localAffinity = false)
+            val taskProto = TaskProto.newBuilder().setDelayTime(task.delayTime).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).build()
+            c ! ClusterClient.Send("/user/manager", taskProto , localAffinity = false)
             complete("ok")
           }
         }

@@ -1,2 +1,2 @@
 rootProject.name = 'dr.strange'
-include 'api', 'core', 'macros'
+include 'api', 'core', 'macros', 'model'

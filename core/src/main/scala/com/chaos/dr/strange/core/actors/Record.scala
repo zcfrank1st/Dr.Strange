@@ -2,7 +2,7 @@ package com.chaos.dr.strange.core.actors
 
 import akka.actor.{Actor, ActorLogging}
 import com.chaos.dr.strange.core.actors.store.{MysqlStore, Store}
-import com.chaos.dr.strange.core.models.Task
+import com.chaos.dr.strange.model.Task
 
 
 /**
@@ -11,14 +11,14 @@ import com.chaos.dr.strange.core.models.Task
 class Record extends Actor with ActorLogging {
 
   override def receive: Receive = {
-    case task @ Task(_ ,_ ,_ ,_ ,_) =>
+    case task : Task.TaskProto =>
       implicit val store = MysqlStore
       recordFailed(task)
 
     case _ => // nothing
   }
 
-  def recordFailed (task: Task)(implicit store: Store): Unit = {
+  def recordFailed (task: Task.TaskProto)(implicit store: Store): Unit = {
     store.keep(task)
   }
 }
