@@ -13,30 +13,33 @@ class Executor extends Actor with ActorLogging {
     case task @ Task(_, _, typ, res, ctnt) =>
       typ.toLowerCase match {
         case "get" =>
-          val resp = Request.Get(res).execute()
-          manipulateResponse(resp)
+          val req = Request.Get(res)
+          manipulateRequest(req)(task)
 
         case "post" =>
-          val resp = Request.Post(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
-          manipulateResponse(resp)
+          val req = Request.Post(res).bodyString(ctnt, ContentType.APPLICATION_JSON)
+          manipulateRequest(req)(task)
 
         case "put" =>
-          val resp = Request.Put(res).bodyString(ctnt, ContentType.APPLICATION_JSON).execute()
-          manipulateResponse(resp)
+          val req = Request.Put(res).bodyString(ctnt, ContentType.APPLICATION_JSON)
+          manipulateRequest(req)(task)
 
         case "delete" =>
-          val resp =
-            Request.Delete(res).execute()
-          manipulateResponse(resp)
+          val req =
+            Request.Delete(res)
+          manipulateRequest(req)(task)
       }
 
     case _ => // nothing
   }
 
-  def manipulateResponse(response: Response)(implicit task: Task): Unit = {
-    if (200 != response.returnResponse().getStatusLine.getStatusCode) {
-      val record = context.actorOf(Props[Record])
-      record ! task
+  def manipulateRequest(req: Request)(implicit task: Task): Unit = {
+    try {
+      req.connectTimeout(3).execute()
+    } catch {
+      case _ =>
+        val record = context.actorOf(Props[Record])
+        record ! task
     }
   }
 }
