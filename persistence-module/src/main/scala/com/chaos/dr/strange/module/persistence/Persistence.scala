@@ -1,5 +1,6 @@
 package com.chaos.dr.strange.module.persistence
 
+import com.chaos.dr.strange.module.model.db.Record
 import com.chaos.dr.strange.module.model.proto.Task.TaskProto
 import com.typesafe.config.{Config, ConfigFactory}
 import org.joda.time.DateTime
@@ -18,7 +19,6 @@ trait Persistence {
 
     implicit val session = AutoSession
 
-    case class Record(id: String, task: com.chaos.dr.strange.module.model.proto.Task.TaskProto, status: Int)
     object Record extends SQLSyntaxSupport[Record] {
       override val tableName = conf.getString("persistence.mysql.tablename")
       def apply(rs: WrappedResultSet) = new Record(
@@ -49,7 +49,7 @@ trait Persistence {
       sql"delete records where id = ${primaryKey}".update.apply()
     }
 
-    def retrieveFails():List[MysqlPersistence.Record] = {
+    def retrieveFails(): List[Record] = {
       sql"select * from records where status = 1".map(rs => Record(rs)).list.apply()
     }
   }

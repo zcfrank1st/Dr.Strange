@@ -23,7 +23,7 @@ import scala.io.StdIn
   * Created by zcfrank1st on 14/02/2017.
   */
 //@app
-object Main extends App with JsonSupport {
+object Api extends App with JsonSupport {
   val config = ConfigFactory.parseString("akka.cluster.roles = [client]").
     withFallback(ConfigFactory.load())
   implicit val system = ActorSystem("ClusterSystem", config)

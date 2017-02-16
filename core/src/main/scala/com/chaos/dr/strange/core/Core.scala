@@ -10,7 +10,7 @@ import com.chaos.dr.strange.core.actors.Manager
 //@application(entrance = "com.chaos.dr.strange.core.actors.Manager")
 //object Main
 
-object Main extends App {
+object Core extends App {
   import akka.actor._
   import akka.cluster.client.ClusterClientReceptionist
 

@@ -45,7 +45,7 @@ project(':api') {
         compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 
     }
-    mainClassName = "com.chaos.dr.strange.api.Main"
+    mainClassName = "com.chaos.dr.strange.api.Api"
 }
 
 project(':core') {
@@ -66,11 +66,21 @@ project(':core') {
 
     }
 
-    mainClassName = "com.chaos.dr.strange.core.Main"
+    mainClassName = "com.chaos.dr.strange.core.Core"
 }
 
 project(':retry') {
+    apply plugin: 'application'
 
+    dependencies {
+//        compile project(':macros-module')
+        compile project(':executor-module')
+
+        compile 'com.typesafe.akka:akka-slf4j_2.11:2.4.16'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.9'
+    }
+
+    mainClassName = "com.chaos.dr.strange.retry.Retry"
 }
 
 project(':executor-module') {
