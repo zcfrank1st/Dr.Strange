@@ -112,3 +112,9 @@ project(':macros-module') {
         compile group: 'org.scalameta', name: 'scalameta_2.11', version: '1.4.0'
     }
 }
+
+project(':register-module') {
+    dependencies {
+
+    }
+}
