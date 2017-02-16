@@ -39,7 +39,7 @@ class Executor extends Actor with ActorLogging with Persistence {
           manipulateRequest(req)(task)
       }
 
-    case _ => // nothing
+    case _ => log.error("[Executor] wrong message error")
   }
 
   def manipulateRequest(req: Request)(implicit task: Task.TaskProto): Unit = {
@@ -51,11 +51,11 @@ class Executor extends Actor with ActorLogging with Persistence {
       delFuture onComplete {
         case Success(_) =>
         case Failure(t) =>
-          log.error("delFuture error occured: {}", t.getMessage)
+          log.error("[Executor] delFuture error occured: {}", t.getMessage)
       }
     } catch {
       case t: Throwable =>
-        log.error("manipulateRequest error occured: {}", t.getMessage)
+        log.error("[Executor] manipulateRequest error occured: {}", t.getMessage)
         val setStatFuture = Future {
           MysqlPersistence.setFailed(task.getPrimary)
         }
@@ -63,7 +63,7 @@ class Executor extends Actor with ActorLogging with Persistence {
         setStatFuture onComplete {
           case Success(_) =>
           case Failure(e) =>
-            log.error("setStatFuture error occured: {}", e.getMessage)
+            log.error("[Executor] setStatFuture error occured: {}", e.getMessage)
         }
     }
   }

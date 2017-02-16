@@ -27,6 +27,7 @@ class Scheduler extends Actor with ActorLogging{
         executor ! task
       }
 
-    case _ => // nothing
+    case _ =>
+      log.warning("[Scheduler] receive message error")
   }
 }

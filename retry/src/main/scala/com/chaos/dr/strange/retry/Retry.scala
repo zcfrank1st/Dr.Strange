@@ -13,5 +13,6 @@ object Retry extends App with Persistence {
   import system.dispatcher
   import scala.concurrent.duration._
 
+  // FIXME 不幂等情况下多次执行如何规避
   system.scheduler.schedule(0 seconds, 5 minutes, system.actorOf(Props[RetryExecutor]), MysqlPersistence.retrieveFails())
 }

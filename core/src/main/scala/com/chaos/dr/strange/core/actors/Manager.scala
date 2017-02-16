@@ -34,5 +34,6 @@ class Manager extends Actor with ActorLogging {
     case MemberRemoved(member, previousStatus) =>
       log.info("Member is Removed: {} after {}", member.address, previousStatus)
     case _ =>
+      log.warning("[Manager] receive message error")
   }
 }

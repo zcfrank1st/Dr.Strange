@@ -14,6 +14,6 @@ class RetryExecutor extends Actor with ActorLogging {
         executor ! record
       })
 
-    case _ => // nothing to do
+    case _ => log.error("[RetryExecutor] wrong message error")
   }
 }

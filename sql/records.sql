@@ -6,5 +6,6 @@ CREATE TABLE `records` (
   `req_url` varchar(1024) NOT NULL DEFAULT '',
   `req_content` text,
   `status` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
