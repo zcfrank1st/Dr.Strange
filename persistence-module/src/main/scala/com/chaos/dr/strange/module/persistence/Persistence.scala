@@ -46,7 +46,7 @@ trait Persistence {
     }
 
     def clearSuccess(primaryKey: String): Unit = {
-      sql"delete records where id = ${primaryKey}".update.apply()
+      sql"delete from records where id = ${primaryKey}".update.apply()
     }
 
     def retrieveFails(): List[Record] = {

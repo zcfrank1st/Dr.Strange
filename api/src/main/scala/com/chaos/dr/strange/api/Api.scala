@@ -19,6 +19,8 @@ import scala.util.{Failure, Success}
 import com.typesafe.config.ConfigFactory
 
 import scala.io.StdIn
+
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 /**
   * Created by zcfrank1st on 14/02/2017.
   */
