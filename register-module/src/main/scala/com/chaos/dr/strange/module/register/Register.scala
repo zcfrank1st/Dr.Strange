@@ -28,17 +28,17 @@ trait Register {
         .head
     }
 
-    def register(port: Int) = {
-      jedis.lpush(registerKey, s"${currentIpV4()}:port")
+    def register(port: Int): Unit = {
+      jedis.sadd(registerKey, s"${currentIpV4()}:port")
     }
 
-    def unregister(port: Int) = {
-      jedis.lrem(registerKey, 0, s"${currentIpV4()}:port")
+    def unregister(port: Int): Unit = {
+      jedis.srem(registerKey, s"${currentIpV4()}:port")
     }
 
-    def availableRegisters () : List[String] = {
+    def availableRegisters () : Set[String] = {
       import scala.collection.JavaConverters._
-      jedis.lrange(registerKey, 0, -1).asScala.toList
+      jedis.smembers(registerKey).asScala.toSet
     }
   }
 }

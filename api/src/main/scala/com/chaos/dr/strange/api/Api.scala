@@ -37,7 +37,7 @@ object Api extends App with JsonSupport with Register {
   val contactPointsTemplate = config.getString("api.contact-points")
   val initialContacts = RedisRegister.availableRegisters().map { conn =>
     ActorPath.fromString(contactPointsTemplate.replace("%[connection]", conn))
-  }.toSet
+  }
   val c = system.actorOf(ClusterClient.props(
     ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
 

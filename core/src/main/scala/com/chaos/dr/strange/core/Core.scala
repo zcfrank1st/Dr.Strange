@@ -17,7 +17,7 @@ object Core extends App with Register {
 
   val system = ActorSystem("ClusterSystem")
 
-  val seeds = RedisRegister.availableRegisters()
+  val seeds = RedisRegister.availableRegisters().toList
   if (seeds.isEmpty) {
     val address = Cluster(system).selfAddress
     Cluster(system).join(address)
