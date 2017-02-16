@@ -9,14 +9,15 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import com.chaos.dr.strange.api.models.Task
-import com.chaos.dr.strange.model.Task.TaskProto
-import com.google.gson.Gson
+import com.chaos.dr.strange.module.model.api.Task
+import com.chaos.dr.strange.module.model.proto.Task.TaskProto
+import com.chaos.dr.strange.module.persistence.Persistence
+
+import scala.concurrent.Future
 //import com.chaos.dr.strange.meta.app
 import com.typesafe.config.ConfigFactory
 
 import scala.io.StdIn
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 /**
   * Created by zcfrank1st on 14/02/2017.
   */
@@ -34,16 +35,21 @@ object Main extends App with JsonSupport {
   val c = system.actorOf(ClusterClient.props(
     ClusterClientSettings(system).withInitialContacts(initialContacts)), "client")
 
-//  val gson = new Gson
-
-  object ApiPath {
+  object ApiPath extends Persistence {
     val route: Route =
       path("api") {
         post {
           entity(as[Task]) { task =>
-            val taskProto = TaskProto.newBuilder().setDelayTime(task.delayTime).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).build()
-            c ! ClusterClient.Send("/user/manager", taskProto , localAffinity = false)
-            complete("ok")
+            val primaryFuture: Future[Option[Int]] = MysqlPersistence.keep(task)
+
+            onSuccess(primaryFuture) {
+              case Some(key) =>
+                val taskProto = TaskProto.newBuilder().setPrimary(key).setDelayTo(task.delayTo).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).build()
+                c ! ClusterClient.Send("/user/manager", taskProto , localAffinity = false)
+                complete("ok")
+
+              case None => complete("error")
+            }
           }
         }
       }

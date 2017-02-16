@@ -1,4 +1,4 @@
-package com.chaos.dr.strange.meta
+package com.chaos.dr.strange.module.meta
 
 import scala.annotation.StaticAnnotation
 

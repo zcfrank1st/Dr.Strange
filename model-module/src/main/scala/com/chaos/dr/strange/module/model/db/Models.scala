@@ -6,4 +6,4 @@ import com.chaos.dr.strange.module.model.proto.Task
   * Created by zcfrank1st on 13/02/2017.
   */
 
-case class Record(executeTime: String, task: Task.TaskProto)
+final case class Record(id:Int, createTime: String, task: Task.TaskProto, status: Int)

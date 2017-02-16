@@ -1,6 +1,6 @@
 package com.chaos.dr.strange.api
 
-import com.chaos.dr.strange.api.models.Task
+import com.chaos.dr.strange.module.model.api.Task
 import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
 
