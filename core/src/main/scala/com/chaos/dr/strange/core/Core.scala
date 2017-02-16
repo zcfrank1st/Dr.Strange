@@ -2,6 +2,7 @@ package com.chaos.dr.strange.core
 
 import akka.cluster.Cluster
 import com.chaos.dr.strange.core.actors.Manager
+import com.chaos.dr.strange.module.register.Register
 //import com.chaos.dr.strange.meta.application
 
 /**
@@ -10,15 +11,26 @@ import com.chaos.dr.strange.core.actors.Manager
 //@application(entrance = "com.chaos.dr.strange.core.actors.Manager")
 //object Main
 
-object Core extends App {
+object Core extends App with Register {
   import akka.actor._
   import akka.cluster.client.ClusterClientReceptionist
 
   val system = ActorSystem("ClusterSystem")
-  // todo check cluster seed if no then do self register(akka://) else get node and join
-  val address = Cluster(system).selfAddress
-  Cluster(system).join(address)
+
+  val seeds = RedisRegister.availableRegisters()
+  if (seeds.isEmpty) {
+    val address = Cluster(system).selfAddress
+    Cluster(system).join(address)
+    RedisRegister.register(address.port.get)
+  } else {
+    val seedsAddress = seeds map { addr =>
+      AddressFromURIString(s"akka.tcp://ClusterSystem@$addr")
+    }
+    val cluster = Cluster(system)
+    cluster.joinSeedNodes(seedsAddress)
+    RedisRegister.register(cluster.selfAddress.port.get)
+  }
+
   val manager = system.actorOf(Props[Manager], "manager")
   ClusterClientReceptionist(system).registerService(manager)
-
 }

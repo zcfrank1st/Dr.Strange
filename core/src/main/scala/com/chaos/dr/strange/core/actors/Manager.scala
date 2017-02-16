@@ -18,6 +18,7 @@ import com.chaos.dr.strange.module.model.proto.Task
 class Manager extends Actor with ActorLogging {
   val cluster = Cluster(context.system)
 
+  // TODO unregister and register
   def receive: Receive = {
     case task: Task.TaskProto =>
       if (0 == task.getTyp) {

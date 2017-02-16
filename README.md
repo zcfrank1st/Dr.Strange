@@ -13,8 +13,7 @@ MIT
 
 
 #### TODO
-[实现] 集群机器注册
 
-[修改] 支持同一机器多jvm，多端口支持
+[实现] 集群机器注册
 
 [提升] macros @app @application
