@@ -90,6 +90,16 @@ public final class Task {
      */
     com.google.protobuf.ByteString
         getReqContentBytes();
+
+    // required uint32 isIdem = 7;
+    /**
+     * <code>required uint32 isIdem = 7;</code>
+     */
+    boolean hasIsIdem();
+    /**
+     * <code>required uint32 isIdem = 7;</code>
+     */
+    int getIsIdem();
   }
   /**
    * Protobuf type {@code com.chaos.dr.strange.module.model.proto.TaskProto}
@@ -170,6 +180,11 @@ public final class Task {
             case 50: {
               bitField0_ |= 0x00000020;
               reqContent_ = input.readBytes();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              isIdem_ = input.readUInt32();
               break;
             }
           }
@@ -416,6 +431,22 @@ public final class Task {
       }
     }
 
+    // required uint32 isIdem = 7;
+    public static final int ISIDEM_FIELD_NUMBER = 7;
+    private int isIdem_;
+    /**
+     * <code>required uint32 isIdem = 7;</code>
+     */
+    public boolean hasIsIdem() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required uint32 isIdem = 7;</code>
+     */
+    public int getIsIdem() {
+      return isIdem_;
+    }
+
     private void initFields() {
       primary_ = "";
       typ_ = 0;
@@ -423,6 +454,7 @@ public final class Task {
       reqTyp_ = "";
       reqUrl_ = "";
       reqContent_ = "";
+      isIdem_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -453,6 +485,10 @@ public final class Task {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasIsIdem()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -477,6 +513,9 @@ public final class Task {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBytes(6, getReqContentBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeUInt32(7, isIdem_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -510,6 +549,10 @@ public final class Task {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getReqContentBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(7, isIdem_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -639,6 +682,8 @@ public final class Task {
         bitField0_ = (bitField0_ & ~0x00000010);
         reqContent_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
+        isIdem_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -691,6 +736,10 @@ public final class Task {
           to_bitField0_ |= 0x00000020;
         }
         result.reqContent_ = reqContent_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.isIdem_ = isIdem_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -733,6 +782,9 @@ public final class Task {
           reqContent_ = other.reqContent_;
           onChanged();
         }
+        if (other.hasIsIdem()) {
+          setIsIdem(other.getIsIdem());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -759,6 +811,10 @@ public final class Task {
           return false;
         }
         if (!hasReqContent()) {
+          
+          return false;
+        }
+        if (!hasIsIdem()) {
           
           return false;
         }
@@ -1146,6 +1202,39 @@ public final class Task {
         return this;
       }
 
+      // required uint32 isIdem = 7;
+      private int isIdem_ ;
+      /**
+       * <code>required uint32 isIdem = 7;</code>
+       */
+      public boolean hasIsIdem() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>required uint32 isIdem = 7;</code>
+       */
+      public int getIsIdem() {
+        return isIdem_;
+      }
+      /**
+       * <code>required uint32 isIdem = 7;</code>
+       */
+      public Builder setIsIdem(int value) {
+        bitField0_ |= 0x00000040;
+        isIdem_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint32 isIdem = 7;</code>
+       */
+      public Builder clearIsIdem() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        isIdem_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:com.chaos.dr.strange.module.model.proto.TaskProto)
     }
 
@@ -1172,10 +1261,10 @@ public final class Task {
   static {
     java.lang.String[] descriptorData = {
       "\n\ntask.proto\022\'com.chaos.dr.strange.modul" +
-      "e.model.proto\"n\n\tTaskProto\022\017\n\007primary\030\001 " +
+      "e.model.proto\"~\n\tTaskProto\022\017\n\007primary\030\001 " +
       "\002(\t\022\013\n\003typ\030\002 \002(\r\022\017\n\007delayTo\030\003 \002(\004\022\016\n\006req" +
       "Typ\030\004 \002(\t\022\016\n\006reqUrl\030\005 \002(\t\022\022\n\nreqContent\030" +
-      "\006 \002(\t"
+      "\006 \002(\t\022\016\n\006isIdem\030\007 \002(\r"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1187,7 +1276,7 @@ public final class Task {
           internal_static_com_chaos_dr_strange_module_model_proto_TaskProto_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_chaos_dr_strange_module_model_proto_TaskProto_descriptor,
-              new java.lang.String[] { "Primary", "Typ", "DelayTo", "ReqTyp", "ReqUrl", "ReqContent", });
+              new java.lang.String[] { "Primary", "Typ", "DelayTo", "ReqTyp", "ReqUrl", "ReqContent", "IsIdem", });
           return null;
         }
       };

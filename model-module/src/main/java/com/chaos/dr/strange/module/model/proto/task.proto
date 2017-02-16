@@ -7,4 +7,5 @@ message TaskProto {
     required string reqTyp = 4;
     required string reqUrl = 5;
     required string reqContent = 6;
+    required uint32 isIdem = 7;
 }
