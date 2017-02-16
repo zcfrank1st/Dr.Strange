@@ -52,7 +52,7 @@ object Api extends App with JsonSupport with Register {
 
             onComplete(persistFuture) {
               case Success(key) =>
-                val taskProto = TaskProto.newBuilder().setPrimary(key).setDelayTo(task.delayTo).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).build()
+                val taskProto = TaskProto.newBuilder().setPrimary(key).setDelayTo(task.delayTo).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).setIsIdem(task.isIdem).build()
                 c ! ClusterClient.Send("/user/manager", taskProto , localAffinity = false)
                 complete("ok")
 

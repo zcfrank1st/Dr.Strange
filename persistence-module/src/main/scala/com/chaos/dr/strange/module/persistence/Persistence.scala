@@ -23,7 +23,7 @@ trait Persistence {
       override val tableName = conf.getString("persistence.mysql.tablename")
       def apply(rs: WrappedResultSet) = new Record(
         rs.string("id"),
-        TaskProto.newBuilder().setDelayTo(rs.long("delay_to")).setReqContent(rs.string("req_content")).setReqTyp(rs.string("req_typ")).setReqUrl(rs.string("req_url")).setTyp(rs.int("typ")).build(),
+        TaskProto.newBuilder().setDelayTo(rs.long("delay_to")).setReqContent(rs.string("req_content")).setReqTyp(rs.string("req_typ")).setReqUrl(rs.string("req_url")).setTyp(rs.int("typ")).setIsIdem(rs.int("is_idem")).build(),
         rs.int("status")
       )
     }
@@ -33,9 +33,9 @@ trait Persistence {
 
       sql"""
       insert into records
-      (id, typ, delay_to, req_typ, req_url, req_content, status)
+      (id, typ, delay_to, req_typ, req_url, req_content, is_idem, status)
       values
-      (${now}, ${task.typ}, ${task.delayTo}, ${task.reqTyp}, ${task.reqUrl}, ${task.reqContent}, 0)
+      (${now}, ${task.typ}, ${task.delayTo}, ${task.reqTyp}, ${task.reqUrl}, ${task.reqContent}, ${task.isIdem}, 0)
       """.update.apply()
 
       now
@@ -49,8 +49,12 @@ trait Persistence {
       sql"delete from records where id = ${primaryKey}".update.apply()
     }
 
-    def retrieveFails(): List[Record] = {
-      sql"select * from records where status = 1".map(rs => Record(rs)).list.apply()
+    def retrieveIdemFails(): List[Record] = {
+      sql"select * from records where status = 1 and is_idem = 0".map(rs => Record(rs)).list.apply()
+    }
+
+    def retrieveNonIdemFails(): List[Record] = {
+      sql"select * from records where status = 1 and is_idem = 1".map(rs => Record(rs)).list.apply()
     }
   }
 
