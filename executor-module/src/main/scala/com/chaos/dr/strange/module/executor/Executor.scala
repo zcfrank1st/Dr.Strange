@@ -46,7 +46,7 @@ class Executor extends Actor with ActorLogging with Persistence {
     try {
       req.connectTimeout(5).execute()
       val delFuture = Future {
-        MysqlPersistence.remove(task.getPrimary)
+        MysqlPersistence.clearSuccess(task.getPrimary)
       }
       delFuture onComplete {
         case Success(_) =>
@@ -57,7 +57,7 @@ class Executor extends Actor with ActorLogging with Persistence {
       case t: Throwable =>
         log.error("manipulateRequest error occured: {}", t.getMessage)
         val setStatFuture = Future {
-          MysqlPersistence.setStatus(1)
+          MysqlPersistence.setFailed(task.getPrimary)
         }
 
         setStatFuture onComplete {

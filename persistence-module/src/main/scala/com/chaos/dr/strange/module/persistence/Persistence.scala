@@ -1,11 +1,8 @@
 package com.chaos.dr.strange.module.persistence
 
-import com.chaos.dr.strange.module.model.api.Task
-import com.chaos.dr.strange.module.model.db.Record
 import com.chaos.dr.strange.module.model.proto.Task.TaskProto
 import com.typesafe.config.{Config, ConfigFactory}
-
-import scala.concurrent.Future
+import org.joda.time.DateTime
 
 /**
   * Created by zcfrank1st on 16/02/2017.
@@ -21,31 +18,39 @@ trait Persistence {
 
     implicit val session = AutoSession
 
+    case class Record(id: String, task: com.chaos.dr.strange.module.model.proto.Task.TaskProto, status: Int)
     object Record extends SQLSyntaxSupport[Record] {
       override val tableName = conf.getString("persistence.mysql.tablename")
       def apply(rs: WrappedResultSet) = new Record(
-        rs.int("id"),
-        rs.string("create_time"),
+        rs.string("id"),
         TaskProto.newBuilder().setDelayTo(rs.long("delay_to")).setReqContent(rs.string("req_content")).setReqTyp(rs.string("req_typ")).setReqUrl(rs.string("req_url")).setTyp(rs.int("typ")).build(),
         rs.int("status")
       )
     }
 
-    // TODO 补全操作
-    def keep(task: Task): Future[Option[Int]] = {
-      Future { Some(1) }
+    def keep(task: com.chaos.dr.strange.module.model.api.Task): String = {
+      val now = DateTime.now().toString("yyyyMMddHHmmss")
+
+      sql"""
+      insert into records
+      (id, typ, delay_to, req_typ, req_url, req_content, status)
+      values
+      (${now}, ${task.typ}, ${task.delayTo}, ${task.reqTyp}, ${task.reqUrl}, ${task.reqContent}, 0)
+      """.update.apply()
+
+      now
     }
 
-    def setStatus(status: Int): Unit = {
-
+    def setFailed(primaryKey: String): Unit = {
+      sql"update records set status = 1 where id = ${primaryKey}".update().apply()
     }
 
-    def remove(primaryKey: Int): Unit = {
-
+    def clearSuccess(primaryKey: String): Unit = {
+      sql"delete records where id = ${primaryKey}".update.apply()
     }
 
-    def retrieve() = Option[Record] {
-      Nothing
+    def retrieveFails():List[MysqlPersistence.Record] = {
+      sql"select * from records where status = 1".map(rs => Record(rs)).list.apply()
     }
   }
 

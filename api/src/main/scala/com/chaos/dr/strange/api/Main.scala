@@ -14,6 +14,7 @@ import com.chaos.dr.strange.module.model.proto.Task.TaskProto
 import com.chaos.dr.strange.module.persistence.Persistence
 
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 //import com.chaos.dr.strange.meta.app
 import com.typesafe.config.ConfigFactory
 
@@ -40,15 +41,17 @@ object Main extends App with JsonSupport {
       path("api") {
         post {
           entity(as[Task]) { task =>
-            val primaryFuture: Future[Option[Int]] = MysqlPersistence.keep(task)
+            val persistFuture = Future {
+              MysqlPersistence.keep(task)
+            }
 
-            onSuccess(primaryFuture) {
-              case Some(key) =>
+            onComplete(persistFuture) {
+              case Success(key) =>
                 val taskProto = TaskProto.newBuilder().setPrimary(key).setDelayTo(task.delayTo).setReqContent(task.reqContent).setReqTyp(task.reqTyp).setReqUrl(task.reqUrl).setTyp(task.typ).build()
                 c ! ClusterClient.Send("/user/manager", taskProto , localAffinity = false)
                 complete("ok")
 
-              case None => complete("error")
+              case Failure(_) => complete("error")
             }
           }
         }

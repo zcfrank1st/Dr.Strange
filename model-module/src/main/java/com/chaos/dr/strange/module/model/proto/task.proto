@@ -1,7 +1,7 @@
 package com.chaos.dr.strange.module.model.proto;
 
 message TaskProto {
-    required uint32 primary = 1;
+    required string primary = 1;
     required uint32 typ = 2;
     required uint64 delayTo = 3;
     required string reqTyp = 4;

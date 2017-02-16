@@ -11,15 +11,20 @@ public final class Task {
   public interface TaskProtoOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required uint32 primary = 1;
+    // required string primary = 1;
     /**
-     * <code>required uint32 primary = 1;</code>
+     * <code>required string primary = 1;</code>
      */
     boolean hasPrimary();
     /**
-     * <code>required uint32 primary = 1;</code>
+     * <code>required string primary = 1;</code>
      */
-    int getPrimary();
+    java.lang.String getPrimary();
+    /**
+     * <code>required string primary = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getPrimaryBytes();
 
     // required uint32 typ = 2;
     /**
@@ -137,9 +142,9 @@ public final class Task {
               }
               break;
             }
-            case 8: {
+            case 10: {
               bitField0_ |= 0x00000001;
-              primary_ = input.readUInt32();
+              primary_ = input.readBytes();
               break;
             }
             case 16: {
@@ -207,20 +212,47 @@ public final class Task {
     }
 
     private int bitField0_;
-    // required uint32 primary = 1;
+    // required string primary = 1;
     public static final int PRIMARY_FIELD_NUMBER = 1;
-    private int primary_;
+    private java.lang.Object primary_;
     /**
-     * <code>required uint32 primary = 1;</code>
+     * <code>required string primary = 1;</code>
      */
     public boolean hasPrimary() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required uint32 primary = 1;</code>
+     * <code>required string primary = 1;</code>
      */
-    public int getPrimary() {
-      return primary_;
+    public java.lang.String getPrimary() {
+      java.lang.Object ref = primary_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          primary_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string primary = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPrimaryBytes() {
+      java.lang.Object ref = primary_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        primary_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     // required uint32 typ = 2;
@@ -385,7 +417,7 @@ public final class Task {
     }
 
     private void initFields() {
-      primary_ = 0;
+      primary_ = "";
       typ_ = 0;
       delayTo_ = 0L;
       reqTyp_ = "";
@@ -429,7 +461,7 @@ public final class Task {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, primary_);
+        output.writeBytes(1, getPrimaryBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeUInt32(2, typ_);
@@ -457,7 +489,7 @@ public final class Task {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, primary_);
+          .computeBytesSize(1, getPrimaryBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -595,7 +627,7 @@ public final class Task {
 
       public Builder clear() {
         super.clear();
-        primary_ = 0;
+        primary_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         typ_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -676,7 +708,9 @@ public final class Task {
       public Builder mergeFrom(com.chaos.dr.strange.module.model.proto.Task.TaskProto other) {
         if (other == com.chaos.dr.strange.module.model.proto.Task.TaskProto.getDefaultInstance()) return this;
         if (other.hasPrimary()) {
-          setPrimary(other.getPrimary());
+          bitField0_ |= 0x00000001;
+          primary_ = other.primary_;
+          onChanged();
         }
         if (other.hasTyp()) {
           setTyp(other.getTyp());
@@ -750,35 +784,76 @@ public final class Task {
       }
       private int bitField0_;
 
-      // required uint32 primary = 1;
-      private int primary_ ;
+      // required string primary = 1;
+      private java.lang.Object primary_ = "";
       /**
-       * <code>required uint32 primary = 1;</code>
+       * <code>required string primary = 1;</code>
        */
       public boolean hasPrimary() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required uint32 primary = 1;</code>
+       * <code>required string primary = 1;</code>
        */
-      public int getPrimary() {
-        return primary_;
+      public java.lang.String getPrimary() {
+        java.lang.Object ref = primary_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          primary_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required uint32 primary = 1;</code>
+       * <code>required string primary = 1;</code>
        */
-      public Builder setPrimary(int value) {
-        bitField0_ |= 0x00000001;
+      public com.google.protobuf.ByteString
+          getPrimaryBytes() {
+        java.lang.Object ref = primary_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          primary_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string primary = 1;</code>
+       */
+      public Builder setPrimary(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         primary_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint32 primary = 1;</code>
+       * <code>required string primary = 1;</code>
        */
       public Builder clearPrimary() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        primary_ = 0;
+        primary_ = getDefaultInstance().getPrimary();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string primary = 1;</code>
+       */
+      public Builder setPrimaryBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        primary_ = value;
         onChanged();
         return this;
       }
@@ -1098,7 +1173,7 @@ public final class Task {
     java.lang.String[] descriptorData = {
       "\n\ntask.proto\022\'com.chaos.dr.strange.modul" +
       "e.model.proto\"n\n\tTaskProto\022\017\n\007primary\030\001 " +
-      "\002(\r\022\013\n\003typ\030\002 \002(\r\022\017\n\007delayTo\030\003 \002(\004\022\016\n\006req" +
+      "\002(\t\022\013\n\003typ\030\002 \002(\r\022\017\n\007delayTo\030\003 \002(\004\022\016\n\006req" +
       "Typ\030\004 \002(\t\022\016\n\006reqUrl\030\005 \002(\t\022\022\n\nreqContent\030" +
       "\006 \002(\t"
     };
