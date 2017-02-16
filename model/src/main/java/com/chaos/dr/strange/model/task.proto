@@ -1,9 +1,0 @@
-package com.chaos.dr.strange.model;
-
-message TaskProto {
-    required uint32 typ = 1;
-    required uint64 delayTime = 2;
-    required string reqTyp = 3;
-    required string reqUrl = 4;
-    required string reqContent = 5;
-}
