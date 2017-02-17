@@ -71,7 +71,7 @@ project(':core') {
     mainClassName = "com.chaos.dr.strange.core.Core"
 }
 
-project(':retry') {
+project(':idem-retry') {
     apply plugin: 'application'
 
     dependencies {
@@ -82,7 +82,21 @@ project(':retry') {
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.9'
     }
 
-    mainClassName = "com.chaos.dr.strange.retry.Retry"
+    mainClassName = "com.chaos.dr.strange.retry.IdemRetry"
+}
+
+project(':non-idem-retry') {
+    apply plugin: 'application'
+
+    dependencies {
+//        compile project(':macros-module')
+        compile project(':executor-module')
+
+        compile 'com.typesafe.akka:akka-slf4j_2.11:2.4.16'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.9'
+    }
+
+    mainClassName = "com.chaos.dr.strange.retry.NonIdemRetry"
 }
 
 project(':executor-module') {

@@ -1,2 +1,2 @@
 rootProject.name = 'dr.strange'
-include 'api', 'core', 'retry', 'executor-module', 'persistence-module', 'macros-module', 'model-module', 'register-module'
+include 'api', 'core', 'idem-retry', 'non-idem-retry', 'executor-module', 'persistence-module', 'macros-module', 'model-module', 'register-module'
