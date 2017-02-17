@@ -46,7 +46,7 @@ class Manager extends Actor with ActorLogging with Register {
     case UnreachableMember(member) =>
       log.warning("Member detected as Unreachable: {}", member)
       RedisRegister.unregister(member.address.port.get)
-    case _ =>
+    case _: Throwable =>
       log.warning("[Manager] receive message error")
   }
 }
