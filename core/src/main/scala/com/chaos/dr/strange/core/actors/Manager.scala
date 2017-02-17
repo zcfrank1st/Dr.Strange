@@ -2,9 +2,10 @@ package com.chaos.dr.strange.core.actors
 
 import akka.actor.{Actor, ActorLogging, Props}
 import akka.cluster.Cluster
-import akka.cluster.ClusterEvent.{MemberRemoved, MemberUp, UnreachableMember}
+import akka.cluster.ClusterEvent._
 import com.chaos.dr.strange.module.executor.Executor
 import com.chaos.dr.strange.module.model.proto.Task
+import com.chaos.dr.strange.module.register.Register
 
 
 /**
@@ -15,10 +16,15 @@ import com.chaos.dr.strange.module.model.proto.Task
   *  typ : 0 => 任务直接异步执行
   *  typ : 1 => 任务定时异步执行
   */
-class Manager extends Actor with ActorLogging {
+class Manager extends Actor with ActorLogging with Register {
   val cluster = Cluster(context.system)
 
-  // TODO unregister and register
+  override def preStart(): Unit = {
+    cluster.subscribe(self, initialStateMode = InitialStateAsEvents,
+      classOf[MemberEvent], classOf[UnreachableMember])
+  }
+  override def postStop(): Unit = cluster.unsubscribe(self)
+
   def receive: Receive = {
     case task: Task.TaskProto =>
       if (0 == task.getTyp) {
@@ -30,10 +36,16 @@ class Manager extends Actor with ActorLogging {
       }
     case MemberUp(member) =>
       log.info("Member is Up: {}", member.address)
+      RedisRegister.register(member.address.port.get)
+    case MemberLeft(member) =>
+      log.warning("Member is Left: {}", member.address)
+      RedisRegister.unregister(member.address.port.get)
+    case ReachableMember(member) =>
+      log.warning("Member detected as Reachable: {}", member)
+      RedisRegister.register(member.address.port.get)
     case UnreachableMember(member) =>
-      log.info("Member detected as Unreachable: {}", member)
-    case MemberRemoved(member, previousStatus) =>
-      log.info("Member is Removed: {} after {}", member.address, previousStatus)
+      log.warning("Member detected as Unreachable: {}", member)
+      RedisRegister.unregister(member.address.port.get)
     case _ =>
       log.warning("[Manager] receive message error")
   }

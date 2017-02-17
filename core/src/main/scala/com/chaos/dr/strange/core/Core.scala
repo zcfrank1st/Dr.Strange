@@ -21,14 +21,12 @@ object Core extends App with Register {
   if (seeds.isEmpty) {
     val address = Cluster(system).selfAddress
     Cluster(system).join(address)
-    RedisRegister.register(address.port.get)
   } else {
     val seedsAddress = seeds map { addr =>
       AddressFromURIString(s"akka.tcp://ClusterSystem@$addr")
     }
     val cluster = Cluster(system)
     cluster.joinSeedNodes(seedsAddress)
-    RedisRegister.register(cluster.selfAddress.port.get)
   }
 
   val manager = system.actorOf(Props[Manager], "manager")
