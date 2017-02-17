@@ -14,6 +14,6 @@ MIT
 
 #### TODO
 
-[实现] 集群机器注册
+[实现] 不幂等情况下重试
 
 [提升] macros @app @application
