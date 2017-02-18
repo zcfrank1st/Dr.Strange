@@ -6,7 +6,7 @@ import com.chaos.dr.strange.module.model.db.Record
 /**
   * Created by zcfrank1st on 16/02/2017.
   */
-class RetryExecutor extends Actor with ActorLogging {
+class IdemRetryExecutor extends Actor with ActorLogging {
   override def receive: Receive = {
     case records: List[Record] =>
       records.foreach(record => {

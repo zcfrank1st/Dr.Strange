@@ -12,7 +12,7 @@ import scala.util.{Failure, Success}
 /**
   * Created by zcfrank1st on 08/02/2017.
   */
-class Executor extends Actor with ActorLogging with Persistence {
+class Executor extends Actor with Persistence with ActorLogging {
   implicit val ec = context.dispatcher
 
   override def receive: Receive = {
